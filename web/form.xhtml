@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+        <f:view contentType="text/html">
+            <f:metadata>
+                <f:viewParam id="otdelGET" name="otdel" value="#{demandBean.otdel}"
+                             required="false"
+                             converter="otdel" converterMessage="#{bundle.badRequest}.#{bundle.unknownOtdel}"
+                             ></f:viewParam>
+                <f:viewParam id="clientGET" name="client" value="#{demandBean.client}"
+                             required="false" 
+                             ></f:viewParam>
+            </f:metadata>
+            
+        <h:head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <title><ui:insert name="title">Demands</ui:insert></title>
+        <h:outputStylesheet name="css/jsfcrud.css"/>
+
+        </h:head>
+        <h:body>
+        <h:form id="form_demand">
+        <p:panel id="panel_demand" header="#{bundle.formDemandHeader}" style="width: 600px;margin: 0 auto;" >
+            
+            <p:focus context="panel_demand" />
+
+            <p:panelGrid styleClass="no-border full-width">
+                <p:row>
+                    <p:column>
+                        <h:outputLabel for="room"  value="#{bundle.formDemandRoomLabel}:" />
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="room" value="#{demandBean.room}" required="true" label="room" style="float: left;">
+                            <f:validateLength minimum="2" maximum="5"/>
+                            </p:inputText>
+                        <p:selectOneMenu id="roomType" value="#{roomTypeBean.room}" effect="fade" style="width:110px;margin-left: 11px">
+                            <f:selectItem itemLabel="#{bundle.formDemandRoomTypeLabel}" itemValue="" />
+                            <f:selectItems value="#{roomTypeBean.rooms}" var="roomType" itemLabel="#{roomType.name}" itemValue="#{roomType.id}"/>
+                            </p:selectOneMenu>
+                    </p:column>
+                </p:row>
+<!--
+                <p:row>
+                    <p:column>
+                        <h:outputLabel for="otdel" value="#{bundle.formDemandOtdelLabel}:"/>
+                    </p:column>
+                    <p:column>
+                        <p:selectOneMenu id="otdel" value="#{demandBean.otdel}" converter="otdel" var="otdel" effect="fade" style="width:100%" >
+                            <f:selectItem itemLabel="#{bundle.formDemandSelectOne}" itemValue="" />
+                            <f:selectItems value="#{otdelBean.otdels}" var="otdel" itemLabel="#{otdel.name}" itemValue="#{otdel.id}" />
+                            </p:selectOneMenu>
+
+                    </p:column>
+                </p:row>
+-->
+                <p:row>
+                    <p:column colspan="2">
+                        <h:outputLabel for="comments" value="#{bundle.formDemandCommentsLabel}:" />    
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column colspan="2">
+                        <p:inputTextarea id="comments" rows="6" cols="50" label="comments" style="width:98%"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <h:outputLabel for="tel"  value="#{bundle.formDemandTelLabel}:"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputLabel for="client" value="#{bundle.formDemandClientLabel}:" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:inputMask id="tel" required="true" label="tel"  style="width:60px" mask="99-99"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="client" value="#{demandBean.client}" required="true" label="client" style="width:98%"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="otdel" value="#{demandBean.otdel}" required="true" label="otdel" style="width:98%"/>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            
+            <p:messages id="messages" />
+            
+            <p:commandButton value="#{bundle.formDemandSubmitLabel}" update="panel_demand" actionListener="#{demandBean.addDemand}" styleClass="full-width" ajax="false"/>
+            
+        </p:panel>
+            
+        </h:form>
+        </h:body>
+        </f:view>
+</html>
+<!--                <h:outputLabel for="printer" value="#{bundle.formDemandPrinterlabel}:"/>
+                    <p:selectOneMenu value="#{printerBean.printer}" effect="fade" >
+                        <f:selectItem itemLabel="#{bundle.formDemandSelectOne}" itemValue="" />
+                        <f:selectItems value="#{printerBean.printer}" var="otdel" itemLabel="#{printer.name}" itemValue="#{printer.name}" />
+                        </p:selectOneMenu>
+                    <p:message for="printer" />
+--> 
+
+
