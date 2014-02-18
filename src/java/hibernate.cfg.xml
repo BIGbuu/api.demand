@@ -7,12 +7,10 @@
     <property name="hibernate.connection.url">jdbc:mysql://10.253.255.3:3306/test_demand?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password">1%-root</property>
-
-    <mapping class="api.demand.model.RoomType"/>
+    <mapping class="api.demand.model.Demand"/>
     <mapping class="api.demand.model.Otdel"/>
+    <mapping class="api.demand.model.RoomType"/>
     <mapping class="api.demand.model.Work"/>
     <mapping class="api.demand.model.Worker"/>
-    <mapping class="api.demand.model.Demand"/>  
-
   </session-factory>
 </hibernate-configuration>

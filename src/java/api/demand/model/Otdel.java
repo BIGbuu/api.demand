@@ -39,12 +39,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 public class Otdel implements Serializable {
     
-    public static final String findAll          = "findAll";
-    public static final String findById         = "findById";
-    public static final String findByIdCotem    = "findByIdCotem";
-    public static final String findByName       = "findByName";
-    public static final String findByFullname   = "findByFullname";
-    public static final String findByDeleted    = "findByDeleted";
+    public static final String findAll          = "Otdel.findAll";
+    public static final String findById         = "Otdel.findById";
+    public static final String findByIdCotem    = "Otdel.findByIdCotem";
+    public static final String findByName       = "Otdel.findByName";
+    public static final String findByFullname   = "Otdel.findByFullname";
+    public static final String findByDeleted    = "Otdel.findByDeleted";
 
     private static final long serialVersionUID = 1L;
     @Id

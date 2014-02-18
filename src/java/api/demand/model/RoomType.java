@@ -28,11 +28,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "room_type")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "RoomType.findAll", query = "SELECT r FROM RoomType r"),
-    @NamedQuery(name = "RoomType.findById", query = "SELECT r FROM RoomType r WHERE r.id = :id"),
-    @NamedQuery(name = "RoomType.findByName", query = "SELECT r FROM RoomType r WHERE r.name = :name"),
-    @NamedQuery(name = "RoomType.findByDeleted", query = "SELECT r FROM RoomType r WHERE r.deleted = :deleted")})
+    @NamedQuery(name = RoomType.findAll, query = "SELECT r FROM RoomType r"),
+    @NamedQuery(name = RoomType.findById, query = "SELECT r FROM RoomType r WHERE r.id = :id"),
+    @NamedQuery(name = RoomType.findByName, query = "SELECT r FROM RoomType r WHERE r.name = :name"),
+    @NamedQuery(name = RoomType.findByDeleted, query = "SELECT r FROM RoomType r WHERE r.deleted = :deleted")})
 public class RoomType implements Serializable {
+    
+    public static final String findAll       = "RoomType.findAll";
+    public static final String findById      = "RoomType.findById";
+    public static final String findByName    = "RoomType.findByName";
+    public static final String findByDeleted = "RoomType.findByDeleted";
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

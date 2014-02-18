@@ -12,20 +12,12 @@ import javax.enterprise.context.RequestScoped;
  * @author BIG_bu
  */
 
-@Named("roomsBean")
+@Named("roomTypeBean")
 @RequestScoped
 public class RoomTypeBean {
     private List<RoomType> rooms;
 
-    public void setRoom(RoomType room) {
-        this.room = room;
-    }
-    private RoomType room;
-
     public RoomTypeBean() {
-    }
-    public RoomType getRoom() {
-        return this.room;
     }
     
     public List<RoomType> getRooms() {
@@ -37,5 +29,4 @@ public class RoomTypeBean {
         s.close();
         return this.rooms;
     }
-    
 }
