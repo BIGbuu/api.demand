@@ -28,14 +28,16 @@ public class OtdelConverter implements Converter {
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
         try {
-            Query q = s.getNamedQuery(Otdel.findByIdCotem)
-                    .setInteger("idCotem", Integer.parseInt(value));
+            Query q = s.getNamedQuery(Otdel.findById)
+                    .setInteger("id", Integer.parseInt(value));
             try {
                 Otdel otdel = (Otdel) q.uniqueResult();
                 return otdel;
             } catch (HibernateException e) {
-                return null;
+                return null; 
             }
+        } catch (NumberFormatException e) {
+                return null;
         } finally {
             s.close();
         }
@@ -46,11 +48,6 @@ public class OtdelConverter implements Converter {
         if (!(value instanceof Otdel) || ((Otdel) value).getId() == null) {
             return null;
         }
-/*        Otdel otdel = new Otdel(123);
-            Integer otdelId = otdel.getId();
-        String id = String.valueOf(otdelId);
-        return id;
-*/
         return ((Otdel) value).getId().toString();
     
     }

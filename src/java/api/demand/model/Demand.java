@@ -23,6 +23,8 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 /**
  *
@@ -30,6 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "demands")
+@DynamicInsert
+@DynamicUpdate
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Demand.findAll", query = "SELECT d FROM Demand d"),
@@ -58,92 +62,92 @@ public class Demand implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 10)
     @Column(name = "room")
     private String room;
-    @Basic(optional = false)
-    @NotNull
+
+    @Basic(optional = true)
     @Column(name = "id_room_type")
     private int idRoomType;
+
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id_otdel")
     private int idOtdel;
+
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id_work")
     private int idWork;
+
     @Basic(optional = false)
-    @NotNull
     @Lob
-    @Size(min = 1, max = 2147483647)
+    @Size(min = 0, max = 2147483647)
     @Column(name = "comments")
-    private String comments;
-    @Basic(optional = false)
-    @NotNull
+    private String comments     =   "";
+
+    @Basic(optional = true)
     @Lob
-    @Size(min = 1, max = 2147483647)
+    @Size(min = 0, max = 2147483647)
     @Column(name = "inf")
-    private String inf;
+    private String inf          =   "";
+    
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 40)
     @Column(name = "client")
     private String client;
+    
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 5)
     @Column(name = "tel")
     private String tel;
-    @Basic(optional = false)
-    @NotNull
+    
+    @Basic(optional = true)
     @Column(name = "time_in")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeIn;
-    @Basic(optional = false)
-    @NotNull
+    
+    @Basic(optional = true)
     @Column(name = "id_accepted_by")
     private int idAcceptedBy;
-    @Basic(optional = false)
-    @NotNull
+    
+    @Basic(optional = true)
     @Column(name = "time_start")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeStart;
-    @Basic(optional = false)
-    @NotNull
+    
+    @Basic(optional = true)
     @Column(name = "time_end")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeEnd;
-    @Basic(optional = false)
-    @NotNull
+    
+    @Basic(optional = true)
     @Column(name = "id_end_by")
     private int idEndBy;
-    @Basic(optional = false)
-    @NotNull
+    
+    @Basic(optional = true)
     @Column(name = "id_helped_by")
     private int idHelpedBy;
-    @Basic(optional = false)
-    @NotNull
+    
+    @Basic(optional = true)
     @Size(min = 1, max = 2)
     @Column(name = "priority")
     private String priority;
-    @Basic(optional = false)
-    @NotNull
+    
+    @Basic(optional = true)
     @Column(name = "deleted")
     private boolean deleted;
-    @Basic(optional = false)
-    @NotNull
+    
+    @Basic(optional = true)
     @Column(name = "id_deleted")
     private int idDeleted;
-    @Basic(optional = false)
-    @NotNull
+    
+    @Basic(optional = true)
     @Size(min = 1, max = 20)
     @Column(name = "deleted_ip")
     private String deletedIp;
-    @Basic(optional = false)
-    @NotNull
+    
+    @Basic(optional = true)
     @Column(name = "deleted_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedDate;
@@ -153,6 +157,28 @@ public class Demand implements Serializable {
 
     public Demand(Integer id) {
         this.id = id;
+    }
+
+    public Demand(String room, int idRoomType, int idOtdel, String comments, String client, String tel) {
+        this.id = null;
+        this.room = room;
+        this.idRoomType = idRoomType;
+        this.idOtdel = idOtdel;
+        this.idWork = 7;
+        this.comments = comments;
+        this.client = client;
+        this.tel = tel;
+//        this.timeIn = null;
+//        this.idAcceptedBy = 0;
+//        this.timeStart = new Date();
+//        this.timeEnd = new Date();
+//        this.idEndBy = 0;
+//        this.idHelpedBy = 0;
+//        this.priority = 0;
+//        this.deleted = false;
+//        this.idDeleted = 0;
+//        this.deletedIp = null;
+//        this.deletedDate = null;
     }
 
     public Demand(Integer id, String room, int idRoomType, int idOtdel, int idWork, String comments, String inf, String client, String tel, Date timeIn, int idAcceptedBy, Date timeStart, Date timeEnd, int idEndBy, int idHelpedBy, String priority, boolean deleted, int idDeleted, String deletedIp, Date deletedDate) {
@@ -177,7 +203,7 @@ public class Demand implements Serializable {
         this.deletedIp = deletedIp;
         this.deletedDate = deletedDate;
     }
-
+    
     public Integer getId() {
         return id;
     }

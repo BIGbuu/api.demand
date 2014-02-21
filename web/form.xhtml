@@ -9,7 +9,7 @@
             <f:metadata>
                 <f:viewParam id="otdelGET" name="otdel" value="#{demandBean.otdel}"
                              required="false"
-                             converter="otdel" converterMessage="#{bundle.badRequest}.#{bundle.unknownOtdel}"
+                             converter="otdelCotem" converterMessage="#{bundle.badRequest}.#{bundle.unknownOtdel}"
                              ></f:viewParam>
                 <f:viewParam id="clientGET" name="client" value="#{demandBean.client}"
                              required="false" 
@@ -35,26 +35,24 @@
                         <p:inputText id="room" value="#{demandBean.room}" required="true" label="room" style="float: left;">
                             <f:validateLength minimum="2" maximum="5"/>
                             </p:inputText>
-                        <p:selectOneMenu id="roomType" value="#{roomTypeBean.rooms}" effect="fade" style="width:110px;margin-left: 11px">
+                        <p:selectOneMenu id="roomType" value="#{demandBean.roomType}" converter="roomType" effect="fade" style="width:110px;margin-left: 11px">
                             <f:selectItem itemLabel="#{bundle.formDemandRoomTypeLabel}" itemValue="" />
-                            <f:selectItems value="#{roomTypeBean.rooms}" var="roomType" itemLabel="#{roomType.name}" itemValue="#{roomType.id}"/>
+                            <f:selectItems value="#{roomTypeBean.rooms}" var="roomType" itemLabel="#{roomType.name}" itemValue="#{roomType}"/>
                             </p:selectOneMenu>
                     </p:column>
                 </p:row>
-<!--                
                 <p:row>
                     <p:column>
                         <h:outputLabel for="otdel" value="#{bundle.formDemandOtdelLabel}:"/>
                     </p:column>
                     <p:column>
-                        <p:selectOneMenu id="otdel" value="#{demandBean.otdel}" converter="otdel" var="otdel" effect="fade" style="width:100%" >
+                        <p:selectOneMenu id="otdel" value="#{demandBean.otdel}" required="true" converter="otdel" effect="fade" style="width:100%" >
                             <f:selectItem itemLabel="#{bundle.formDemandSelectOne}" itemValue="" />
-                            <f:selectItems value="#{otdelBean.otdels}" var="otdel" itemLabel="#{otdel.name}" itemValue="#{otdel.id}" />
+                            <f:selectItems value="#{otdelBean.otdels}" var="otdel" itemLabel="#{otdel.name}" itemValue="#{otdel}" />
                             </p:selectOneMenu>
 
                     </p:column>
                 </p:row>
--->
                 <p:row>
                     <p:column colspan="2">
                         <h:outputLabel for="comments" value="#{bundle.formDemandCommentsLabel}:" />    
@@ -62,7 +60,7 @@
                 </p:row>
                 <p:row>
                     <p:column colspan="2">
-                        <p:inputTextarea id="comments" rows="6" cols="50" label="comments" style="width:98%"/>
+                        <p:inputTextarea id="comments" value="#{demandBean.comments}" rows="6" cols="50" label="comments" style="width:98%"/>
                     </p:column>
                 </p:row>
                 <p:row>
@@ -75,20 +73,18 @@
                 </p:row>
                 <p:row>
                     <p:column>
-                        <p:inputMask id="tel" required="true" label="tel"  style="width:60px" mask="99-99"/>
+                        <p:inputMask id="tel"    value="#{demandBean.tel}" required="true" label="tel"  style="width:60px" mask="99-99"/>
                     </p:column>
                     <p:column>
                         <p:inputText id="client" value="#{demandBean.client}" required="true" label="client" style="width:98%"/>
                     </p:column>
-                    <p:column>
-                        <p:inputText id="otdel" value="#{demandBean.otdel}" label="otdel" style="width:98%"/>
-                    </p:column>
                 </p:row>
+
             </p:panelGrid>
             
             <p:messages id="messages" />
             
-            <p:commandButton value="#{bundle.formDemandSubmitLabel}" update="panel_demand" actionListener="#{demandBean.addDemand}" styleClass="full-width" ajax="false"/>
+            <p:commandButton value="#{bundle.formDemandSubmitLabel}" update="panel_demand messages " actionListener="#{demandBean.addDemand}" styleClass="full-width" ajax="true"/>
             
         </p:panel>
             

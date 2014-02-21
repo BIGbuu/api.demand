@@ -1,13 +1,13 @@
 package api.demand.converter;
 
 import api.demand.HibernateUtil;
-import api.demand.model.RoomType;
+import api.demand.model.Otdel;
+import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import javax.inject.Named;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -16,29 +16,28 @@ import org.hibernate.Session;
  *
  * @author BIG_bu
  */
+
 @Named
 @RequestScoped
-@FacesConverter(value = "roomType")
-public class RoomTypeConvertor implements Converter {
-    
+@FacesConverter(value = "otdelCotem")
+public class OtdelCotemConverter implements Converter {
+
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        
+
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        
         try {
-            Query q = s.getNamedQuery(RoomType.findById)
-                    .setInteger("id", Integer.parseInt(value));
+            Query q = s.getNamedQuery(Otdel.findByIdCotem)
+                    .setInteger("idCotem", Integer.parseInt(value));
             try {
-                RoomType roomType = (RoomType) q.uniqueResult();
-                return roomType;
+                Otdel otdel = (Otdel) q.uniqueResult();
+                return otdel;
             } catch (HibernateException e) {
-                return null;
+                return null; 
             }
-        }
-        catch (NumberFormatException e) {
-            return null;
+        } catch (NumberFormatException e) {
+                return null;
         } finally {
             s.close();
         }
@@ -46,10 +45,11 @@ public class RoomTypeConvertor implements Converter {
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (!(value instanceof RoomType) || ((RoomType) value).getId() == null) {
+        if (!(value instanceof Otdel) || ((Otdel) value).getId() == null) {
             return null;
         }
-        return ((RoomType) value).getId().toString();
-    }
+        return ((Otdel) value).getId().toString();
     
+    }
+
 }
