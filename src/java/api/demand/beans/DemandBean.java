@@ -4,10 +4,13 @@ import api.demand.ClientUtil;
 import api.demand.HibernateUtil;
 import api.demand.model.Demand;
 import api.demand.model.Otdel;
+import api.demand.model.Printer;
 import api.demand.model.RoomType;
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
@@ -23,24 +26,46 @@ import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 @SessionScoped
 public class DemandBean implements Serializable{
 
-    private Demand demand;
+    private Demand  demand;
+
+    private String  hostName;
+    private String  hostIp;
     
-    private String room;
+    private String  room;
     private RoomType roomType;
-    private Otdel otdel;
-    private String comments;
-    private String client;
-    private String tel;
+    private Otdel   otdel;
+    private String  comments;
+    private Printer Pprinter;
+    private String  printer;
+        private Boolean printerConfirm;
+
+    private String  client;
+    private String  tel;
 
     public DemandBean() {
 
         try {
-            this.room   = ClientUtil.getHostName().split("-")[1];
+            this.hostName   = ClientUtil.getHostName();
+            this.hostIp     = ClientUtil.getIp();
+            this.room       = this.hostName.split("-")[1];
         } catch (Exception e) {
             this.room = null;
         }
-    }        
-    public String getRoom() {
+/*        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        this.client = externalContext.getRequestHeaderMap().get("User-Agent");
+*/    }        
+    public boolean Session() {
+        try {
+            if (this.demand.getId() != null) {
+                FacesContext.getCurrentInstance().addMessage(null, 
+                        new FacesMessage("Уникальный номер вашей заявки №: "+this.demand.getId()) );            
+            }
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
+    }
+    public String getRoom() throws IllegalStateException{
         return this.room;
     }
     public Demand getDemand() {
@@ -61,7 +86,16 @@ public class DemandBean implements Serializable{
     public String getComments() {
         return comments;
     }
-    
+    public String getPprinter() {
+        return this.Pprinter.getName();
+    }
+    public String getPrinter() {
+        return this.printer;
+    }
+    public Boolean getPrinterConfirm() {
+        return this.printerConfirm;
+    }
+
     
     public void setDemand(Demand demand) {
         this.demand = demand;
@@ -84,44 +118,60 @@ public class DemandBean implements Serializable{
     public void setComments(String comments) {
         this.comments = comments;
     }
+    public void setPprinter(String printer) {
+        this.Pprinter.setName(printer);
+    }
+    public void setPrinter(String printer) {
+        this.printer=printer;
+    }
+    public void setPrinterConfirm(Boolean printerConfirm) {
+        this.printerConfirm=printerConfirm;
+    }
 
     public void addDemand(ActionEvent actionEvent) {
         try {
             if (this.demand.getId() != null) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Заявка УЖЕ принята. Уникальный номер вашей заявки №: "+this.demand.getId()));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Уникальный номер вашей заявки №: "+this.demand.getId()) );
                 return;
             }
         } catch (NullPointerException e) {
         }
-                Session s = HibernateUtil.getSessionFactory().openSession();
-                s.beginTransaction();
-                Integer roomTypeId = 0;
-                Integer otdelId = 0;
-                try {
-                     roomTypeId = this.roomType.getId(); 
-                } catch (NullPointerException e) {
-                }
-                try {
-                     otdelId = this.otdel.getId(); 
-                } catch (NullPointerException e) {
-                }
+        Session s = HibernateUtil.getSessionFactory().openSession();
+        s.beginTransaction();
+        Integer roomTypeId = 0;
+        Integer otdelId = 0;
+        String printer  = ((this.printerConfirm)?("принтер:"+this.printer):"");
+        try {
+            roomTypeId = this.roomType.getId();
+        } catch (NullPointerException e) {
+        }
+        try {
+            otdelId = this.otdel.getId();
+        } catch (NullPointerException e) {
+        }
 
+        this.demand = new Demand(
+                this.room,
+                roomTypeId,
+                otdelId,
+                this.comments + " " + printer + "| from api.demand: " + this.hostName + "@" + this.hostIp,
+                this.client,
+                this.tel);
 
-                this.demand = new Demand(this.room, roomTypeId, otdelId, this.comments, this.client, this.tel);
-                s.save(this.demand);
-                assertNotNull(this.demand.getId());
+        s.save(this.demand);
+        assertNotNull(this.demand.getId());
 
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Заявка принята. Уникальный номер вашей заявки №: "+this.demand.getId()));
-        /*          FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Заявка принята. №: "+
-                          "|room:"+this.room+
-                          "|roomType:"+Integer.parseInt(this.roomType)+
-                          "|otdel:"+this.otdel.getId()+
-                          "|comments:"+this.comments+
-                          "|client:"+this.client+
-                          "|tel:"+this.tel
-                          ));
-        */        
-                s.close();
+        
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Заявка принята. №:"+this.demand.getId()) );
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("каб.       : "+  this.room));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("тип каб.   : "+  this.roomType.getName()));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("отдел      : "+  this.otdel.getName()));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("комментарии: "+  this.comments+ " " + printer));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("ФИО        : "+  this.client));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("тел        : "+  this.tel));
+
+        
+        s.close();
             
         
     }

@@ -5,7 +5,7 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
-        <f:view contentType="text/html">
+    <f:view contentType="text/html" encoding="UTF-8">
             <f:metadata>
                 <f:viewParam id="otdelGET" name="otdel" value="#{demandBean.otdel}"
                              required="false"
@@ -14,11 +14,12 @@
                 <f:viewParam id="clientGET" name="client" value="#{demandBean.client}"
                              required="false" 
                              ></f:viewParam>
-            </f:metadata>
+            </f:metadata>        
         <h:head>
             <title><ui:insert name="title">Demands</ui:insert></title>
             <h:outputStylesheet name="css/jsfcrud.css"/>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
             <script type="text/javascript" LANGUAGE="JavaScript">
                 function getPrinter(){
                     var oShell = new ActiveXObject("WScript.Shell"); 
@@ -27,32 +28,40 @@
                     sDefault = oShell.RegRead(sRegVal);
                     GetDefaultPrinter = sDefault.split(',',1);
                     return GetDefaultPrinter;
-//onload="PF('comments').jq.val(getPrinter())"                    
                 }
             </script>
         </h:head>
-        <h:body >
+            <h:body 
+                onload="
+                    document.getElementById('form_demand:printerHidden').value=
+                            document.getElementById('form_demand:printer').value=getPrinter();
+                "
+                >
+
         <h:form id="form_demand" >
-        <p:panel id="panel_demand" header="#{bundle.formDemandHeader}" style="width: 600px;margin: 0 auto;">
+            
+            
+        <p:panel id="panel_demand" header="IE#{bundle.formDemandHeader}" style="width: 600px;margin: 0 auto;">
             
             <p:focus context="panel_demand" />
 
             <p:panelGrid styleClass="no-border full-width">
-                <p:row>
+
+                    <p:row>
                     <p:column>
                         <h:outputLabel for="room"  value="#{bundle.formDemandRoomLabel}:" />
                     </p:column>
                     <p:column>
-                        <p:inputText id="room" value="#{demandBean.room}" 
+                        <h:inputText id="room" value="#{demandBean.room}" 
                                      required="true" 
                                      requiredMessage="#{bundle.formFieldReq}'#{bundle.formDemandRoomLabel}'" 
-                                     label="room" style="float: left;" 
+                                     label="room" style="float: left;" styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" 
                                      disabled="#{demandBean.demand.id != null}">
                             <f:validateLength minimum="2" maximum="5"/>
-                            </p:inputText>
+                            </h:inputText>
                         <p:selectOneMenu id="roomType" value="#{demandBean.roomType}" 
                                          converter="roomType" 
-                                         effect="fade" style="width:110px;margin-left: 11px" 
+                                         effect="fade" style="width:110px;margin-left: 10px;" 
                                          disabled="#{demandBean.demand.id != null}">
                             <f:selectItem itemLabel="#{bundle.formDemandRoomTypeLabel}" itemValue="" />
                             <f:selectItems value="#{roomTypeBean.rooms}" 
@@ -70,15 +79,38 @@
                                          required="true" 
                                          requiredMessage="#{bundle.formFieldReq}'#{bundle.formDemandOtdelLabel}'" 
                                          converter="otdel" 
-                                         filter="true" filterMatchMode="startsWith"
-                                         height="300"
-                                         effect="fade" styleClass="full-width"
+                                         filter="false" filterMatchMode="startsWith"
+                                         height="500" 
+                                         effect="fade" style="width:100%" 
                                          disabled="#{demandBean.demand.id != null}">
                             <f:selectItem itemLabel="#{bundle.formDemandSelectOne}" itemValue="" />
                             <f:selectItems value="#{otdelBean.otdels}" 
                                            var="otdel" 
                                            itemLabel="#{otdel.name}" itemValue="#{otdel}" />
                             </p:selectOneMenu>
+
+                    </p:column>
+                </p:row>
+                <p:row >
+                    <p:column >
+                        <h:outputLabel for="printer" value="#{bundle.formDemandPrinterAsklabel}: " />
+                    </p:column>
+                    <p:column>
+                        <h:inputHidden
+                            value="#{demandBean.printer}" id="printerHidden" />
+                        <h:inputText 
+                            value="#{demandBean.printer}" 
+                            id="printer" 
+                            style="float: left;width:70%" styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" 
+                            readonly="true"
+                            disabled="#{demandBean.demand.id != null}"/>
+                        <p:selectBooleanButton  
+                            value="#{demandBean.printerConfirm}"
+                            style="margin-left: 10px; width: 20%;"
+                            onLabel="Да"   onIcon  = "ui-icon-check"
+                            offLabel="Нет"  offIcon = "ui-icon-close"
+                            disabled="#{demandBean.demand.id != null}"/>                            
+
 
                     </p:column>
                 </p:row>
@@ -89,11 +121,12 @@
                 </p:row>
                 <p:row>
                     <p:column colspan="2">
-                        <p:inputTextarea id="comments" widgetVar="comments" value="#{demandBean.comments}" rows="6" cols="50" 
+                        <h:inputTextarea id="comments" value="#{demandBean.comments}" rows="6" cols="50" 
                                          label="comments" style="width:98%" 
                                          disabled="#{demandBean.demand.id != null}"/>
                     </p:column>
                 </p:row>
+
                 <p:row>
                     <p:column>
                         <h:outputLabel for="tel"  value="#{bundle.formDemandTelLabel}:"/>
@@ -104,35 +137,44 @@
                 </p:row>
                 <p:row>
                     <p:column>
-                        <p:inputMask id="tel"    value="#{demandBean.tel}" 
+<!--                        
+                        <р:inputMask id="tel"    value="#{demandBean.tel}" 
                                      required="true" requiredMessage="#{bundle.formFieldReq}'#{bundle.formDemandTelLabel}'" 
                                      label="tel"  
                                      style="width:60px" mask="99-99" 
                                      disabled="#{demandBean.demand.id != null}"/>
+-->
+<!---->
+                            <h:inputText id="tel"    value="#{demandBean.tel}" 
+                                     required="true" requiredMessage="#{bundle.formFieldReq}'#{bundle.formDemandTelLabel}'" 
+                                     label="tel"  
+                                     style="width:60px" styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all"
+                                     disabled="#{demandBean.demand.id != null}"/>
+<!---->
                     </p:column>
                     <p:column>
-                        <p:inputText id="client" value="#{demandBean.client}" 
+                        <h:inputText id="client" value="#{demandBean.client}" 
                                      required="true" requiredMessage="#{bundle.formFieldReq}'#{bundle.formDemandClientLabel}'" 
                                      label="client" 
-                                     style="width:98%" 
-                                     disabled="#{demandBean.demand.id != null}"/>
+                                     style="width:98%" styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all"
+                                     disabled="#{demandBean.demand.id != null}"
+                                     
+                                     />
                     </p:column>
                 </p:row>
-
             </p:panelGrid>
-            
-                            
             <p:commandButton 
                 value="#{bundle.formDemandSubmitLabel}"
                 actionListener="#{demandBean.addDemand}"
                 update="panel_demand"
                 styleClass="full-width" style="margin-top: 10px;margin-bottom: 10px;"
                 rendered="#{demandBean.Session()}"
+                ajax=""
                 />
             <p:messages id="messages" />
             
         </p:panel>
-            
+
         </h:form>
         </h:body>
         </f:view>
