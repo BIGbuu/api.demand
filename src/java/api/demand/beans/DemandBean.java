@@ -7,6 +7,7 @@ import api.demand.model.Otdel;
 import api.demand.model.Printer;
 import api.demand.model.RoomType;
 import java.io.Serializable;
+import java.util.Map;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -41,7 +42,7 @@ public class DemandBean implements Serializable{
 
     private String  client;
     private String  tel;
-
+    private String  httpHeader;
     public DemandBean() {
 
         try {
@@ -51,9 +52,7 @@ public class DemandBean implements Serializable{
         } catch (Exception e) {
             this.room = null;
         }
-/*        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        this.client = externalContext.getRequestHeaderMap().get("User-Agent");
-*/    }        
+    }        
     public boolean Session() {
         try {
             if (this.demand.getId() != null) {
@@ -94,6 +93,19 @@ public class DemandBean implements Serializable{
     }
     public Boolean getPrinterConfirm() {
         return this.printerConfirm;
+    }
+    public String getHttpHeader() {
+        String tmp = "";
+        try {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            Map<String,String> map = fc.getExternalContext().getRequestHeaderMap();
+            
+            for(Object o : map.keySet().toArray()){
+              tmp += o+": "+map.get(o);
+            }
+        } catch (Exception e) {
+        }
+        return "123: "+tmp;
     }
 
     
