@@ -7,11 +7,9 @@ import api.demand.model.Otdel;
 import api.demand.model.Printer;
 import api.demand.model.RoomType;
 import java.io.Serializable;
-import java.util.Map;
+import java.net.UnknownHostException;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
@@ -42,26 +40,36 @@ public class DemandBean implements Serializable{
 
     private String  client;
     private String  tel;
-    private String  httpHeader;
-    public DemandBean() {
+    public DemandBean() throws UnknownHostException {
 
         try {
             this.hostName   = ClientUtil.getHostName();
             this.hostIp     = ClientUtil.getIp();
-            this.room       = this.hostName.split("-")[1];
-        } catch (Exception e) {
-            this.room = null;
+        } catch (UnknownHostException e) {
         }
+        try {
+            this.room       = this.hostName.split("-")[1];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            this.room       = null;
+//            this.room       = ClientUtil.getHostName();
+//            this.room       = ClientUtil.getIp();
+//            this.comments   = "ip:"     + ClientUtil.getIp()+
+//                              "name:"   + ClientUtil.getHostName();
+/*        String productName = Advapi32Util.registryGetStringValue(
+            WinReg.HKEY_CURRENT_USER, "Software\Microsoft\Windows NT\CurrentVersion\Windows\Device", "Device");
+        System.out.printf("Product Name: %s\n", productName);
+*/        
+        }
+        
+        
     }        
-    public boolean Session() {
+    public void Session() {
         try {
             if (this.demand.getId() != null) {
                 FacesContext.getCurrentInstance().addMessage(null, 
                         new FacesMessage("Уникальный номер вашей заявки №: "+this.demand.getId()) );            
             }
-            return false;
         } catch (Exception e) {
-            return true;
         }
     }
     public String getRoom() throws IllegalStateException{
@@ -93,19 +101,6 @@ public class DemandBean implements Serializable{
     }
     public Boolean getPrinterConfirm() {
         return this.printerConfirm;
-    }
-    public String getHttpHeader() {
-        String tmp = "";
-        try {
-            FacesContext fc = FacesContext.getCurrentInstance();
-            Map<String,String> map = fc.getExternalContext().getRequestHeaderMap();
-            
-            for(Object o : map.keySet().toArray()){
-              tmp += o+": "+map.get(o);
-            }
-        } catch (Exception e) {
-        }
-        return "123: "+tmp;
     }
 
     
@@ -141,25 +136,27 @@ public class DemandBean implements Serializable{
     }
 
     public void addDemand(ActionEvent actionEvent) {
-        try {
-            if (this.demand.getId() != null) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Уникальный номер вашей заявки №: "+this.demand.getId()) );
-                return;
-            }
-        } catch (NullPointerException e) {
-        }
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        Integer roomTypeId = 0;
-        Integer otdelId = 0;
-        String printer  = ((this.printerConfirm)?("принтер:"+this.printer):"");
+        Integer roomTypeId  = 0;
+        Integer otdelId     = 0;
+        String printer      = "";
+
+        try {
+            printer = ((this.printerConfirm)?("принтер:"+this.printer):"");
+        } catch (Exception e) {
+        }
+        
         try {
             roomTypeId = this.roomType.getId();
         } catch (NullPointerException e) {
+            roomTypeId = 0;
         }
+
         try {
             otdelId = this.otdel.getId();
         } catch (NullPointerException e) {
+            otdelId = 0;
         }
 
         this.demand = new Demand(
@@ -176,7 +173,7 @@ public class DemandBean implements Serializable{
         
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Заявка принята. №:"+this.demand.getId()) );
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("каб.       : "+  this.room));
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("тип каб.   : "+  this.roomType.getName()));
+            if (roomTypeId > 0) {FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("тип каб.   : "+  this.roomType.getName()));}
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("отдел      : "+  this.otdel.getName()));
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("комментарии: "+  this.comments+ " " + printer));
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("ФИО        : "+  this.client));

@@ -1,0 +1,68 @@
+/* 
+    Created on : Mar 7, 2014, 11:28:04 AM
+    Author     : BIG_bu
+*/
+.uiie-input {
+    display: block;
+    height: 24px;
+    margin: 0px;
+    padding-top: 4px;
+    padding-left: 4px;
+    padding-bottom: 0px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #a8a8a8;
+    
+    font-family: Arial,sans-serif;
+    font-size: 14px !important;
+    font-weight: normal;
+}
+.uiie-select {
+    display: block;
+    height: 30px; 
+    border-width: 1px;
+    border-style: solid;
+    border-color: #a8a8a8;
+    
+    font-family: Arial,sans-serif;
+    font-weight: normal;
+}
+.width98 {
+    width: 98%;
+}
+.button {
+    height:     30px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #a8a8a8;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+}
+table#panel_demand {
+    background-color: #FFFFFF;
+    border-width: 0px;
+    margin: 0;
+    padding: 0px;
+}
+table#panel_demand th{
+    padding: 8px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #a8a8a8;
+    background-color: #c4c4c4;
+}
+table#panel_demand td{
+    padding: 0px;
+    padding-bottom: 5px;
+} 
+table#panel_demand td.padtop10{
+    padding-top: 10px
+}
+table#panel_demand td.padtop4{
+    padding-top: 4px
+}
+table#panel_demand table td{
+    border-width: 0px;
+    padding: 0px;
+}    

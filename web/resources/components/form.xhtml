@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:body>
+        <h:form id="form_demand" >
+        
+        <p:panel id="panel_demand" header="#{bundle.formDemandHeader}" footer="#{bundle.formITtelmessage}" style="width: 510px;margin: 0 auto;">
+            
+            <p:focus context="panel_demand" />
+
+            <p:panelGrid styleClass="no-border full-width">
+                <p:row>
+                    <p:column>
+                        <h:outputLabel for="room"  value="#{bundle.formDemandRoomLabel}:" />
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="room" value="#{demandBean.room}" 
+                                     required="true" 
+                                     requiredMessage="#{bundle.formFieldRequired}'#{bundle.formDemandRoomLabel}'" 
+                                     label="room" style="width: 100px;float: left;" 
+                                     disabled="#{demandBean.demand.id != null}"
+                                     >
+                            <f:validateLength minimum="2" maximum="5" />
+                            </p:inputText>
+                        <p:selectOneMenu id="roomType" value="#{demandBean.roomType}" 
+                                         converter="roomType" 
+                                         effect="fade" style="width:150px;float: right;" 
+                                         disabled="#{demandBean.demand.id != null}">
+                            <f:selectItem itemLabel="#{bundle.formDemandRoomTypeLabel}" itemValue="0" />
+                            <f:selectItems value="#{roomTypeBean.rooms}" 
+                                           var="roomType" 
+                                           itemLabel="#{roomType.name}" itemValue="#{roomType}"/>
+                            </p:selectOneMenu>
+                    </p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        <h:outputLabel for="otdel" value="#{bundle.formDemandOtdelLabel}:"/>
+                    </p:column>
+                    <p:column>
+                        <p:selectOneMenu id="otdel" value="#{demandBean.otdel}" widgetVar="otdel"
+                                         required="true" 
+                                         requiredMessage="#{bundle.formFieldRequired}'#{bundle.formDemandOtdelLabel}'" 
+                                         converter="otdel" 
+                                         filter="true" filterMatchMode="startsWith"
+                                         height="300"
+                                         effect="fade" styleClass="full-width"
+                                         disabled="#{demandBean.demand.id != null}">
+                            <f:selectItem itemLabel="#{bundle.formDemandSelectOne}" itemValue="" />
+                            <f:selectItems value="#{otdelBean.otdels}" 
+                                           var="otdel" 
+                                           itemLabel="#{otdel.name}" itemValue="#{otdel}" />
+                            </p:selectOneMenu>
+
+                    </p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column colspan="2">
+                        <h:outputLabel for="comments" value="#{bundle.formDemandCommentsLabel}:" />    
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column colspan="2">
+                        <p:inputTextarea id="comments" widgetVar="comments" value="#{demandBean.comments}" rows="6" cols="50" 
+                                         label="comments" style="width:98%" 
+                                         disabled="#{demandBean.demand.id != null}"/>
+                    </p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        <h:outputLabel for="tel"  value="#{bundle.formDemandTelLabel}:"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputLabel for="client" value="#{bundle.formDemandClientLabel}:" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:inputMask id="tel"    value="#{demandBean.tel}" 
+                                     required="true" requiredMessage="#{bundle.formFieldRequired}'#{bundle.formDemandTelLabel}'" 
+                                     label="tel"  
+                                     style="width:60px" mask="99-99" 
+                                     disabled="#{demandBean.demand.id != null}"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="client" value="#{demandBean.client}" 
+                                     required="true" requiredMessage="#{bundle.formFieldRequired}'#{bundle.formDemandClientLabel}'" 
+                                     label="client" 
+                                     style="width:98%" 
+                                     disabled="#{demandBean.demand.id != null}"/>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+
+            <p:commandButton 
+                value="#{bundle.formDemandSubmitLabel}"
+                actionListener="#{demandBean.addDemand}"
+                update="form_demand"
+                styleClass="full-width" style="margin-top: 10px;margin-bottom: 10px;"
+                rendered="#{demandBean.demand.id == null}"
+                />
+            #{demandBean.Session()}
+            <p:messages id="messages" />
+            
+        </p:panel>
+        </h:form>
+        </h:body>    
+    </cc:implementation>
+</html>

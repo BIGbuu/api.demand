@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:body 
+                onload  = "document.getElementById('formie6:form_demand:printer').value=document.getElementById('formie6:form_demand:printerHidden').value=getPrinter();"
+        >
+        <h:form id="form_demand" >
+        
+        <p:panel style="width: 590px;margin: 0 auto;" footer="#{bundle.formITtelmessage}" >
+            <table id="panel_demand" columns="2" border="0" cellpadding="0" cellspacing="0" width="100%" >
+                <tr><th colspan="2" width="100%"><h:outputText value="IE6 #{bundle.formDemandHeader}" /></th></tr>
+                <tr><td colspan="2" width="100%">&nbsp;</td></tr>
+                <tr>
+                    <td style="width:145px" class="padtop10"><h:outputLabel for="room"  value="#{bundle.formDemandRoomLabel}:" /></td>
+                    <td ><table style="width:100%" border="0" cellpadding="0" cellspacing="0"><tr>
+                                <td width="50%" class="padtop4">
+                                    <h:inputText id="room" value="#{demandBean.room}" 
+                                                 required="true" 
+                                                 requiredMessage="#{bundle.formFieldRequired}'#{bundle.formDemandRoomLabel}'" 
+                                                 label="room" style="width:190px;float: left;" styleClass="uiie-input" 
+                                                 disabled="#{demandBean.demand.id != null}">
+                                        <f:validateLength minimum="2" maximum="5"/>
+                                    </h:inputText></td>
+                                <td width="50%" class="padtop4"><h:selectOneMenu id="roomType" value="#{demandBean.roomType}" 
+                                                                                 converter="roomType" 
+                                                                                 style="width:190px;float: right;" styleClass="uiie-select"
+                                                                                 >
+                                        <f:selectItem itemLabel="#{bundle.formDemandRoomTypeLabel}" itemValue="0" />
+                                        <f:selectItems value="#{roomTypeBean.rooms}" 
+                                                       var="roomType" 
+                                                       itemLabel="#{roomType.name}" itemValue="#{roomType}"/>
+                                    </h:selectOneMenu></td>
+                            </tr></table></td>
+                </tr>
+
+                <tr>
+                    <td class="padtop10"><h:outputLabel for="otdel" value="#{bundle.formDemandOtdelLabel}:"/></td>
+                    <td class="padtop4">
+                        <h:selectOneMenu id="otdel" value="#{demandBean.otdel}" 
+                                         required="true" 
+                                         requiredMessage="#{bundle.formFieldRequired}'#{bundle.formDemandOtdelLabel}'" 
+                                         converter="otdel" 
+                                         styleClass="full-width uiie-select"
+                                         >
+                            <f:selectItem itemLabel="#{bundle.formDemandSelectOne}" itemValue="" />
+                            <f:selectItems value="#{otdelBean.otdels}" 
+                                           var="otdel" 
+                                           itemLabel="#{otdel.name}" itemValue="#{otdel}" />
+                        </h:selectOneMenu>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="padtop10"><h:outputLabel for="printer" value="#{bundle.formDemandPrinterAsklabel}: " /></td>
+                    <td class="padtop4"><table border="0" style="border:0px" cellpadding="0" cellspacing="0" width="100%"><tr>
+                                <td>
+                                    <h:inputHidden
+                                        value="#{demandBean.printer}" id="printerHidden" />
+                                    <h:inputText 
+                                        value="#{demandBean.printer}" 
+                                        id="printer" 
+                                        style="float: left;width:300px;" styleClass="uiie-input" 
+                                        readonly="true"
+                                        disabled="#{demandBean.demand.id != null}"/>
+                                </td>
+                                <td width="160px">
+                                    <p:selectBooleanButton  
+                                        value="#{demandBean.printerConfirm}"
+                                        style="width: 100px;float: right; display: block;" 
+                                        styleClass="button"
+                                        onLabel="Да"   onIcon  = "ui-icon-check"
+                                        offLabel="Нет"  offIcon = "ui-icon-close"
+                                        disabled="#{demandBean.demand.id != null}"/> 
+                                </td>
+                            </tr></table></td>
+                </tr>
+
+                <tr><td colspan="2" width="100%"><h:outputLabel for="comments" value="#{bundle.formDemandCommentsLabel}:" /></td></tr>
+                <tr><td colspan="2" width="100%">
+                        <h:inputTextarea id="comments" value="#{demandBean.comments}" rows="6" cols="50" 
+                                         label="comments" style="height: 100px" styleClass="full-width uiie-input"
+                                         disabled="#{demandBean.demand.id != null}"/>
+                    </td></tr>
+
+
+                <tr>
+                    <td><h:outputLabel for="tel"  value="#{bundle.formDemandTelLabel}:"/></td>
+                    <td><h:outputLabel for="client" value="#{bundle.formDemandClientLabel}:" /></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <h:inputText id="tel"    value="#{demandBean.tel}" 
+                                     required="true" requiredMessage="#{bundle.formFieldRequired}'#{bundle.formDemandTelLabel}'" 
+                                     label="tel"  
+                                     style="width:140px;float:left;" styleClass="uiie-input"
+                                     disabled="#{demandBean.demand.id != null}"/>
+
+                    </td>
+                    <td>
+                        <h:inputText id="client" value="#{demandBean.client}" 
+                                     required="true" requiredMessage="#{bundle.formFieldRequired}'#{bundle.formDemandClientLabel}'" 
+                                     label="client" 
+                                     style="float:right;" styleClass="width98 uiie-input"
+                                     disabled="#{demandBean.demand.id != null}"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" width="100%">
+                        <p:commandButton 
+                            value="#{bundle.formDemandSubmitLabel}"
+                            actionListener="#{demandBean.addDemand}"
+                            styleClass="button full-width" style="margin-top: 10px;margin-bottom: 10px;"
+                            rendered="#{demandBean.demand.id == null}"
+                            ajax="false"
+                            />
+                    </td>
+                </tr>
+                #{demandBean.Session()}
+                <tr><td colspan="2" width="100%"><p:messages id="messages" /></td></tr>
+                
+            </table>
+
+        </p:panel>
+        </h:form>
+        </h:body>    
+    </cc:implementation>
+</html>

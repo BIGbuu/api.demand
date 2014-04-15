@@ -19,6 +19,7 @@ import javax.inject.Named;
 @RequestScoped
 public class PrinterBean {
     List <Printer> printers;
+    Printer printer;
     
     public PrinterBean(){
         
@@ -26,6 +27,9 @@ public class PrinterBean {
     
     public List<Printer> getPrinters(){
         return printers;
+    }
+    public Printer getDefaultPrinter(){
+        return printer;
     }
     
 }

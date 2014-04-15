@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+        xmlns:co="http://xmlns.jcp.org/jsf/composite/components"
+        xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html" encoding="UTF-8">
+        <f:metadata>
+            <f:viewParam id="otdelGET" name="otdel" value="#{demandBean.otdel}"
+                         required="false"
+                         converter="otdelCotem" converterMessage="#{bundle.badRequest}.#{bundle.unknownOtdel}"
+                         ></f:viewParam>
+            <f:viewParam id="clientGET" name="client" value="#{demandBean.client}"
+                         required="false" 
+                         ></f:viewParam>
+        </f:metadata>
+        <h:head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta http-equiv="msthemecompatible" content="no"/>
+
+            <title><ui:insert name="title">Demands</ui:insert></title>
+            <h:outputStylesheet name="css/jsfcrud.css"/>
+            <h:outputStylesheet name="css/ie6.css" rendered="#{fn:containsIgnoreCase(request.getHeader('User-Agent'), 'MSIE')}"/>
+            
+            <h:outputScript name="js/printer.js?" />
+            
+        </h:head>
+      
+        <co:form        id="form"       rendered    = "#{
+            (!fn:containsIgnoreCase(request.getHeader('User-Agent'), 'rv:11.0'   ))and
+            (!fn:containsIgnoreCase(request.getHeader('User-Agent'), 'MSIE'      ))
+            }" />
+        <co:formie11    id="formie11"   rendered    = "#{fn:containsIgnoreCase(request.getHeader('User-Agent'), 'rv:11.0'   )}" />
+        <co:formie6     id="formie6"    rendered    = "#{fn:containsIgnoreCase(request.getHeader('User-Agent'), 'MSIE'      )}" />
+
+    </f:view>
+</html>

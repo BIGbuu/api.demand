@@ -5,20 +5,12 @@
         <param-value>Development</param-value>
     </context-param>
     <!-- Production,Development,UnitTest,SystemTest,Extension -->
-    <context-param>
-        <param-name>PARAMETER_ENCODING</param-name>
-        <param-value>UTF-8</param-value>
-    </context-param>
     <filter>
-        <filter-name>EncodingFilter</filter-name>
-        <filter-class>api.demand.EncodingFilter</filter-class>
-        <init-param>
-            <param-name>encoding</param-name>
-            <param-value>UTF-8</param-value>
-        </init-param>
+        <filter-name>IeFilter</filter-name>
+        <filter-class>api.demand.IeFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>EncodingFilter</filter-name>
+        <filter-name>IeFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     <servlet>
@@ -36,6 +28,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/form.xhtml</welcome-file>
+        <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
 </web-app>
